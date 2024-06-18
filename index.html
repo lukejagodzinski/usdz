@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>three.js webgl - USDZ exporter</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    div {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      height: 100%;
+    }
+
+    a {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5em;
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 0.5em 1em;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <a id="link" rel="ar" href="" download="model.usdz">
+      <svg viewBox="0 0 24 24" width="24">
+        <path d="m18.25 7.6-5.5-3.18c-.46-.27-1.04-.27-1.5 0L5.75 7.6c-.46.27-.75.76-.75 1.3v6.35c0 .54.29 1.03.75 1.3l5.5 3.18c.46.27 1.04.27 1.5 0l5.5-3.18c.46-.27.75-.76.75-1.3V8.9c0-.54-.29-1.03-.75-1.3M7 14.96v-4.62l4 2.32v4.61zm5-4.03L8 8.61l4-2.31 4 2.31zm1 6.34v-4.61l4-2.32v4.62zM7 2H3.5C2.67 2 2 2.67 2 3.5V7h2V4h3zm10 0h3.5c.83 0 1.5.67 1.5 1.5V7h-2V4h-3zM7 22H3.5c-.83 0-1.5-.67-1.5-1.5V17h2v3h3zm10 0h3.5c.83 0 1.5-.67 1.5-1.5V17h-2v3h-3z"></path>
+      </svg>
+      <span>VIEW IN MY ROOM</span></a>
+  </div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
+
+    const loader = new THREE.TextureLoader();
+    const textureUrl = './texture.jpeg';
+    const texture = loader.load(textureUrl, texture => {
+      const geometry = new THREE.BoxGeometry(1.9, 2.4, 0.05);
+      const material = new THREE.MeshStandardMaterial({
+        color: 0xc8c8c8, // This color will blend with the texture
+        roughness: 0.4,
+        metalness: 0.6,
+        map: texture // Apply the loaded texture
+      });
+      const cube = new THREE.Mesh(geometry, material);
+
+      async function exportUSDZ() {
+        const exporter = new USDZExporter();
+        const arraybuffer = await exporter.parseAsync(cube); // Export the cube with texture
+        const blob = new Blob([arraybuffer], { type: 'model/vnd.usdz+zip' });
+
+        const link = document.getElementById('link');
+        link.href = URL.createObjectURL(blob);
+      }
+
+      exportUSDZ();
+    });
+
+
+  </script>
+</body>
+
+</html>
