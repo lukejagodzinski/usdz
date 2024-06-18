@@ -54,7 +54,7 @@
     const loader = new THREE.TextureLoader();
     const textureUrl = './texture.jpeg';
     const texture = loader.load(textureUrl, texture => {
-      const geometry = new THREE.BoxGeometry(1.9, 2.4, 0.05);
+      const geometry = new THREE.BoxGeometry(0.39, 0.51, 0.01);
       const material = new THREE.MeshStandardMaterial({
         color: 0xc8c8c8, // This color will blend with the texture
         roughness: 0.4,
